@@ -24,7 +24,7 @@ public class Attendence {
 
     @ManyToOne
     @JoinColumn(name = "schedule_id")
-    private Schedule scheduleId;
+    private Schedule schedule;
 
     @NotNull
     private Boolean attendence = false;
