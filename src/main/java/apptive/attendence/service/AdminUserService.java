@@ -1,14 +1,19 @@
 package apptive.attendence.service;
 
 import apptive.attendence.dto.request.PenaltyRequestDTO;
+import apptive.attendence.dto.request.UserRequestDTO;
+import apptive.attendence.dto.response.PenaltyDTO;
 import apptive.attendence.dto.response.PenaltyResponseDTO;
 import apptive.attendence.dto.response.UserResponseDTO;
-import apptive.attendence.repository.UsersRepository;
+import apptive.attendence.entity.*;
+import apptive.attendence.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.yaml.snakeyaml.util.Tuple;
 
-import java.util.List;
+import java.time.Instant;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -16,28 +21,96 @@ import java.util.List;
 public class AdminUserService {
 
     private final UsersRepository usersRepository;
+    private final PenaltyRepository penaltyRepository;
+    private final ScheduleRepository scheduleRepository;
+    private final PenaltyRuleRepository ruleRepository;
+    private final AttendenceRepository attendenceRepository;
 
     public List<UserResponseDTO> getAllUsers() {
-        return null;
+        List<Users> users = usersRepository.allUsers();
+        List<UserResponseDTO> userResponseDTOs = new ArrayList<>();
+        for (Users user : users) {
+            userResponseDTOs.add(UserResponseDTO.from(user));
+        }
+        return userResponseDTOs;
     }
 
     public List<PenaltyResponseDTO> getAllPenalties() {
-        return null;
+        List<Penalty> allPenalties = penaltyRepository.findAll();
+        Map<Tuple<Date, String>, List<PenaltyDTO>> penalties = new HashMap<>();
+        List<PenaltyResponseDTO> penaltiesResponseDTOs = new ArrayList<>();
+
+        for (int i = 0; i < allPenalties.size(); i++) {
+            Penalty penalty = allPenalties.get(i);
+
+            Date scheduleDate = penalty.getSchedule().getScheduleDate();
+            String name = penalty.getUser().getName();
+
+            Attendence attendence = attendenceRepository.findByUsersIdAndScheduleId(
+                    penalty.getUser().getId(), penalty.getSchedule().getId()
+            );
+            Tuple<Date, String> key = new Tuple<>(scheduleDate, name);
+
+            PenaltyDTO penaltyDTO = new PenaltyDTO(penalty.getPenaltyRule().getPenalty(), attendence.getAbsentReason(), penalty.getPenaltyRule().getNotes());
+            if (!penalties.containsKey(key)) {
+                penalties.put(key, new ArrayList<>());
+            }
+            penalties.get(key).add(penaltyDTO);
+        }
+
+        for (Tuple<Date, String> tuple : penalties.keySet()) {
+            List<PenaltyDTO> penaltyDTOs = penalties.get(tuple);
+            Integer total = penaltyDTOs.stream()
+                    .mapToInt(PenaltyDTO::penalty)
+                    .sum();
+
+            PenaltyResponseDTO responseDTO = new PenaltyResponseDTO(
+                    tuple._1(),
+                    tuple._2(),
+                    penaltyDTOs,
+                    total
+            );
+            penaltiesResponseDTOs.add(responseDTO);
+        }
+        return penaltiesResponseDTOs;
     }
 
-    public PenaltyResponseDTO addPenalty(PenaltyRequestDTO penaltyRequestDTO) {
-        return null;
+    public PenaltyRequestDTO addPenalty(PenaltyRequestDTO penaltyRequestDTO) {
+
+        Users user = usersRepository.findUserById(penaltyRequestDTO.userId());
+        Schedule schedule = scheduleRepository.findById(penaltyRequestDTO.scheduleId()).orElse(null);
+        PenaltyRule rule = ruleRepository.findById(penaltyRequestDTO.penaltyRuleId()).orElse(null);
+
+        Penalty penalty = Penalty.builder()
+                .user(user)
+                .penaltyDate(Date.from(Instant.now()))
+                .schedule(schedule)
+                .penaltyRule(rule)
+                .build();
+
+        penaltyRepository.save(penalty);
+        return penaltyRequestDTO;
     }
 
-    public UserResponseDTO addUser() {
-        return null;
+    public UserResponseDTO addUser(UserRequestDTO userRequestDTO) {
+        Users user = Users.builder()
+                .name(userRequestDTO.name())
+                .email(userRequestDTO.email())
+                .part(userRequestDTO.part())
+                .generation(userRequestDTO.generation())
+                .studentId(userRequestDTO.studentId())
+                .department(userRequestDTO.department())
+                .build();
+
+        usersRepository.save(user);
+        return UserResponseDTO.from(user);
     }
 
     public void deletePenalty(long penaltyId) {
-
+        penaltyRepository.deleteById(penaltyId);
     }
 
     public void deleteUser(long userId) {
-
+        usersRepository.deleteById(userId);
     }
 }

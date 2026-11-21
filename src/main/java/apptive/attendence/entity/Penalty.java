@@ -1,10 +1,19 @@
 package apptive.attendence.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Penalty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +32,6 @@ public class Penalty {
     @ManyToOne
     @JoinColumn(name = "penaltyrule_id")
     private PenaltyRule penaltyRule;
+
+    private LocalDateTime createAt = LocalDateTime.now();
 }
