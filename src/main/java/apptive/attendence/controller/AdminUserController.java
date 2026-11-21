@@ -24,8 +24,8 @@ public class AdminUserController {
 
     @GetMapping("/penalties")
     public ResponseEntity<List<PenaltyResponseDTO>> getAllPenalties() {
-        List<PenaltyResponseDTO> allPenalties = adminUserService.getAllUsers();
-
+        List<PenaltyResponseDTO> allPenalties = adminUserService.getAllPenalties();
+        return ResponseEntity.ok(allPenalties);
     }
 
     @PostMapping("/penalty")

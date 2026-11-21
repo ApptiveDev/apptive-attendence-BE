@@ -1,5 +1,6 @@
 package apptive.attendence.service;
 
+import apptive.attendence.dto.request.PenaltyRequestDTO;
 import apptive.attendence.dto.response.PenaltyResponseDTO;
 import apptive.attendence.dto.response.UserResponseDTO;
 import apptive.attendence.repository.UsersRepository;
@@ -17,15 +18,19 @@ public class AdminUserService {
     private final UsersRepository usersRepository;
 
     public List<UserResponseDTO> getAllUsers() {
-
+        return null;
     }
 
     public List<PenaltyResponseDTO> getAllPenalties() {
+        return null;
+    }
 
+    public PenaltyResponseDTO addPenalty(PenaltyRequestDTO penaltyRequestDTO) {
+        return null;
     }
 
     public UserResponseDTO addUser() {
-
+        return null;
     }
 
     public void deletePenalty(long penaltyId) {
