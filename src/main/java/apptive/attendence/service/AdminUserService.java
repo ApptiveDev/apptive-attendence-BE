@@ -27,7 +27,7 @@ public class AdminUserService {
     private final AttendenceRepository attendenceRepository;
 
     public List<UserResponseDTO> getAllUsers() {
-        List<Users> users = usersRepository.allUsers();
+        List<Users> users = usersRepository.findAll();
         List<UserResponseDTO> userResponseDTOs = new ArrayList<>();
         for (Users user : users) {
             userResponseDTOs.add(UserResponseDTO.from(user));
@@ -77,7 +77,7 @@ public class AdminUserService {
 
     public PenaltyRequestDTO addPenalty(PenaltyRequestDTO penaltyRequestDTO) {
 
-        Users user = usersRepository.findUserById(penaltyRequestDTO.userId());
+        Users user = usersRepository.findById(penaltyRequestDTO.userId()).orElse(null);
         Schedule schedule = scheduleRepository.findById(penaltyRequestDTO.scheduleId()).orElse(null);
         PenaltyRule rule = ruleRepository.findById(penaltyRequestDTO.penaltyRuleId()).orElse(null);
 
