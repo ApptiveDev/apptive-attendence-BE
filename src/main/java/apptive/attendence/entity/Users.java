@@ -35,4 +35,6 @@ public class Users {
     private Integer generation;
 
     private String part;
+
+    private Roles role;
 }
