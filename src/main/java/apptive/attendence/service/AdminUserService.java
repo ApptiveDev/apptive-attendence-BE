@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.util.Tuple;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -37,19 +37,19 @@ public class AdminUserService {
 
     public List<PenaltyResponseDTO> getAllPenalties() {
         List<Penalty> allPenalties = penaltyRepository.findAll();
-        Map<Tuple<Date, String>, List<PenaltyDTO>> penalties = new HashMap<>();
+        Map<Tuple<LocalDate, String>, List<PenaltyDTO>> penalties = new HashMap<>();
         List<PenaltyResponseDTO> penaltiesResponseDTOs = new ArrayList<>();
 
         for (int i = 0; i < allPenalties.size(); i++) {
             Penalty penalty = allPenalties.get(i);
 
-            Date scheduleDate = penalty.getSchedule().getScheduleDate();
+            LocalDate scheduleDate = penalty.getSchedule().getScheduleDate();
             String name = penalty.getUser().getName();
 
             Attendence attendence = attendenceRepository.findByUsersIdAndScheduleId(
                     penalty.getUser().getId(), penalty.getSchedule().getId()
             );
-            Tuple<Date, String> key = new Tuple<>(scheduleDate, name);
+            Tuple<LocalDate, String> key = new Tuple<>(scheduleDate, name);
 
             PenaltyDTO penaltyDTO = new PenaltyDTO(penalty.getPenaltyRule().getPenalty(), attendence.getAbsentReason(), penalty.getPenaltyRule().getNotes());
             if (!penalties.containsKey(key)) {
@@ -58,7 +58,7 @@ public class AdminUserService {
             penalties.get(key).add(penaltyDTO);
         }
 
-        for (Tuple<Date, String> tuple : penalties.keySet()) {
+        for (Tuple<LocalDate, String> tuple : penalties.keySet()) {
             List<PenaltyDTO> penaltyDTOs = penalties.get(tuple);
             Integer total = penaltyDTOs.stream()
                     .mapToInt(PenaltyDTO::penalty)
@@ -83,7 +83,7 @@ public class AdminUserService {
 
         Penalty penalty = Penalty.builder()
                 .user(user)
-                .penaltyDate(Date.from(Instant.now()))
+                .penaltyDate(LocalDate.now())
                 .schedule(schedule)
                 .penaltyRule(rule)
                 .build();

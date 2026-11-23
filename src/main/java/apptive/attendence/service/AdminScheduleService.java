@@ -40,6 +40,14 @@ public class AdminScheduleService {
         return ScheduleResponseDTO.from(schedule);
     }
 
+    public ScheduleResponseDTO update(ScheduleRequestDTO scheduleRequestDTO, Long id) {
+        Schedule oldSchedule = scheduleRepository.findById(id).orElse(null);
+
+        oldSchedule.updateScheduleInfo(scheduleRequestDTO);
+        scheduleRepository.save(oldSchedule);
+        return ScheduleResponseDTO.from(oldSchedule);
+    }
+
     public void deleteSchedule(Long id) {
         scheduleRepository.deleteById(id);
     }

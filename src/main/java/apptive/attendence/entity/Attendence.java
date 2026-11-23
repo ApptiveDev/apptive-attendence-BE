@@ -27,6 +27,7 @@ public class Attendence {
     private Schedule schedule;
 
     @NotNull
+    @Builder.Default
     private Boolean attendence = false;
 
     private String absentReason;

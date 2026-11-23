@@ -21,9 +21,9 @@ public class AdminScheduleController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    @PutMapping("/schedule")
-    public ResponseEntity<ScheduleResponseDTO> updateSchedule(@RequestBody ScheduleRequestDTO requestDTO) {
-        ScheduleResponseDTO responseDTO = adminScheduleService.save(requestDTO);
+    @PutMapping("/{scheduleId}")
+    public ResponseEntity<ScheduleResponseDTO> updateSchedule(@RequestBody ScheduleRequestDTO requestDTO, @PathVariable Long scheduleId) {
+        ScheduleResponseDTO responseDTO = adminScheduleService.update(requestDTO, scheduleId);
         return ResponseEntity.ok(responseDTO);
     }
 

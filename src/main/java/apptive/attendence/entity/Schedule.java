@@ -1,5 +1,6 @@
 package apptive.attendence.entity;
 
+import apptive.attendence.dto.request.ScheduleRequestDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,8 +10,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.sql.Time;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -24,13 +25,22 @@ public class Schedule {
 
     private String title;
 
-    private Date scheduleDate;
+    private LocalDate scheduleDate;
 
-    private Time startTime;
+    private LocalTime startTime;
 
-    private Time endTime;
+    private LocalTime endTime;
 
     private Integer permissionPenalty;
 
     private Integer nonPermissionPenalty;
+
+    public void updateScheduleInfo(ScheduleRequestDTO scheduleRequestDTO) {
+        this.title = scheduleRequestDTO.title();
+        this.scheduleDate = scheduleRequestDTO.scheduleDate();
+        this.startTime = scheduleRequestDTO.startTime();
+        this.endTime = scheduleRequestDTO.endTime();
+        this.permissionPenalty = scheduleRequestDTO.permissionPenalty();
+        this.nonPermissionPenalty = scheduleRequestDTO.nonPermissionPenalty();
+    }
 }

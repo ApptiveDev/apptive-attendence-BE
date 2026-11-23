@@ -6,8 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -27,11 +27,12 @@ public class Penalty {
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
-    private Date penaltyDate;
+    private LocalDate penaltyDate;
 
     @ManyToOne
     @JoinColumn(name = "penaltyrule_id")
     private PenaltyRule penaltyRule;
 
+    @Builder.Default
     private LocalDateTime createAt = LocalDateTime.now();
 }

@@ -2,15 +2,15 @@ package apptive.attendence.dto.response;
 
 import apptive.attendence.entity.Schedule;
 
-import java.sql.Time;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public record ScheduleResponseDTO (
         Long scheduleId,
         String title,
-        Date scheduleDate,
-        Time startTime,
-        Time endTime,
+        LocalDate scheduleDate,
+        LocalTime startTime,
+        LocalTime endTime,
         Integer permissionPenalty,
         Integer nonPermissionPenalty
 ) {

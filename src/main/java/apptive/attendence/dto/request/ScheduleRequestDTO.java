@@ -1,13 +1,13 @@
 package apptive.attendence.dto.request;
 
-import java.sql.Time;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public record ScheduleRequestDTO (
         String title,
-        Date scheduleDate,
-        Time startTime,
-        Time endTime,
+        LocalDate scheduleDate,
+        LocalTime startTime,
+        LocalTime endTime,
         Integer permissionPenalty,
         Integer nonPermissionPenalty
 ) {}
