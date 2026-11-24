@@ -10,6 +10,7 @@ import apptive.attendence.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.yaml.snakeyaml.util.Tuple;
 
 import java.time.LocalDate;
@@ -26,6 +27,7 @@ public class AdminUserService {
     private final PenaltyRuleRepository ruleRepository;
     private final AttendenceRepository attendenceRepository;
 
+    @Transactional(readOnly = true)
     public List<UserResponseDTO> getAllUsers() {
         List<Users> users = usersRepository.findAll();
         List<UserResponseDTO> userResponseDTOs = new ArrayList<>();
@@ -35,6 +37,7 @@ public class AdminUserService {
         return userResponseDTOs;
     }
 
+    @Transactional(readOnly = true)
     public List<PenaltyResponseDTO> getAllPenalties() {
         List<Penalty> allPenalties = penaltyRepository.findAll();
         Map<Tuple<LocalDate, String>, List<PenaltyDTO>> penalties = new HashMap<>();
@@ -75,6 +78,7 @@ public class AdminUserService {
         return penaltiesResponseDTOs;
     }
 
+    @Transactional
     public PenaltyRequestDTO addPenalty(PenaltyRequestDTO penaltyRequestDTO) {
 
         Users user = usersRepository.findById(penaltyRequestDTO.userId()).orElse(null);
@@ -92,6 +96,7 @@ public class AdminUserService {
         return penaltyRequestDTO;
     }
 
+    @Transactional
     public UserResponseDTO addUser(UserRequestDTO userRequestDTO) {
         Users user = Users.builder()
                 .name(userRequestDTO.name())
@@ -106,10 +111,12 @@ public class AdminUserService {
         return UserResponseDTO.from(user);
     }
 
+    @Transactional
     public void deletePenalty(long penaltyId) {
         penaltyRepository.deleteById(penaltyId);
     }
 
+    @Transactional
     public void deleteUser(long userId) {
         usersRepository.deleteById(userId);
     }

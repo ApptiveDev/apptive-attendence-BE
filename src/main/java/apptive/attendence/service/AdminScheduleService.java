@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class AdminScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final AttendenceRepository attendenceRepository;
 
+    @Transactional
     public ScheduleResponseDTO save(ScheduleRequestDTO scheduleRequestDTO) {
         Schedule schedule = Schedule.builder()
                         .title(scheduleRequestDTO.title())
@@ -40,6 +42,7 @@ public class AdminScheduleService {
         return ScheduleResponseDTO.from(schedule);
     }
 
+    @Transactional
     public ScheduleResponseDTO update(ScheduleRequestDTO scheduleRequestDTO, Long id) {
         Schedule oldSchedule = scheduleRepository.findById(id).orElse(null);
 
@@ -48,10 +51,12 @@ public class AdminScheduleService {
         return ScheduleResponseDTO.from(oldSchedule);
     }
 
+    @Transactional
     public void deleteSchedule(Long id) {
         scheduleRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     public TotalUserDTO getTotalAttendence(Long scheduleId) {
         List<Users> users = usersRepository.findAll();
 
