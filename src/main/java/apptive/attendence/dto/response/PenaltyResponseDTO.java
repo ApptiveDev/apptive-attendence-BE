@@ -1,5 +1,11 @@
 package apptive.attendence.dto.response;
 
-public class PenaltyResponseDTO {
+import java.time.LocalDate;
+import java.util.List;
 
-}
+public record PenaltyResponseDTO(
+    LocalDate penaltyDate,
+    String name,
+    List<PenaltyDTO> penalties,
+    Integer total
+) {}

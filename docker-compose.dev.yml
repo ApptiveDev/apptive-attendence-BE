@@ -1,0 +1,23 @@
+services:
+  be:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file: .env
+    depends_on:
+      - db
+  db:
+    image: postgres:17
+    restart: always
+    volumes:
+      - db:/var/lib/postgres/
+    environment:
+      POSTGRES_USER: attendence_user
+      POSTGRES_DB: attendence
+      POSTGRES_PASSWORD: attendence_pass
+
+volumes:
+  db:

@@ -19,6 +19,4 @@ public class AdminAttendController {
         String code = adminAttendService.createCode();
         return ResponseEntity.ok(code);
     }
-
-
 }

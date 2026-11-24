@@ -29,8 +29,8 @@ public class AdminUserController {
     }
 
     @PostMapping("/penalty")
-    public ResponseEntity<PenaltyResponseDTO> addPenalty(@RequestBody PenaltyRequestDTO penaltyRequestDTO) {
-        PenaltyResponseDTO penalties = adminUserService.addPenalty(penaltyRequestDTO);
+    public ResponseEntity<PenaltyRequestDTO> addPenalty(@RequestBody PenaltyRequestDTO penaltyRequestDTO) {
+        PenaltyRequestDTO penalties = adminUserService.addPenalty(penaltyRequestDTO);
         return ResponseEntity.ok(penalties);
     }
 

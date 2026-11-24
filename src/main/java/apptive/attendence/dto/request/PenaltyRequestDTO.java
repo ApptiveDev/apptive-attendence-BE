@@ -1,4 +1,9 @@
 package apptive.attendence.dto.request;
 
-public class PenaltyRequestDTO {
-}
+import java.util.Date;
+
+public record PenaltyRequestDTO(
+   Long userId,
+   Long scheduleId,
+   Integer penaltyRuleId
+) {}
