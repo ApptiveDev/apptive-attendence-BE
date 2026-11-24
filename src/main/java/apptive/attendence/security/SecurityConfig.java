@@ -13,7 +13,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizeRequests ->authorizeRequests
-                        .requestMatchers("/api/admin").hasRole("ADMIN"))
+                        .requestMatchers("/api/admin").hasRole("ADMIN")
                         .requestMatchers("/api/**").permitAll())
                 .formLogin(formLogin ->
                         formLogin.loginPage("/login")
