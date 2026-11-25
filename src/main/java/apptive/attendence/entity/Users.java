@@ -1,5 +1,7 @@
 package apptive.attendence.entity;
 
+import apptive.attendence.dto.request.UserRequestDTO;
+import apptive.attendence.dto.response.UserResponseDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,6 +13,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -36,5 +40,26 @@ public class Users {
 
     private String part;
 
+    private String profilePhotoURL;
+
     private Roles role;
+
+    private String team;
+
+    @Builder.Default
+    private LocalDateTime registrationDate = LocalDateTime.now();
+
+    @Builder.Default
+    private LocalDateTime updateDate = LocalDateTime.now();
+
+    public void updateUser(UserRequestDTO userRequest) {
+        this.studentId = userRequest.studentId();
+        this.name = userRequest.name();
+        this.department = userRequest.department();
+        this.email = userRequest.email();
+        this.generation = userRequest.generation();
+        this.part = userRequest.part();
+        this.profilePhotoURL = userRequest.profilePhotoURL();
+        this.team = userRequest.team();
+    }
 }

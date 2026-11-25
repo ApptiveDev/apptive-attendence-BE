@@ -9,5 +9,7 @@ public record UserRequestDTO (
         String department,
         String email,
         Integer generation,
-        String part
+        String part,
+        String profilePhotoURL,
+        String team
 ) { }
