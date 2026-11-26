@@ -8,6 +8,7 @@ public record UserRequestDTO (
         String name,
         String department,
         String email,
+        String password,
         Integer generation,
         String part,
         String profilePhotoURL,
