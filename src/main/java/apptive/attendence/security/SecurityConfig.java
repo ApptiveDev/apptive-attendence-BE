@@ -13,8 +13,10 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizeRequests ->authorizeRequests
+                        .requestMatchers("/login", "/error").permitAll()
                         .requestMatchers("/api/admin").hasRole("ADMIN")
-                        .requestMatchers("/api/**").permitAll())
+                        .requestMatchers("/api/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll())
                 .formLogin(formLogin ->
                         formLogin.loginPage("/login")
                                 .defaultSuccessUrl("/", true)

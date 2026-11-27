@@ -12,8 +12,10 @@ services:
   db:
     image: postgres:17
     restart: always
+    ports:
+      - "5434:5432"
     volumes:
-      - db:/var/lib/postgres/
+      - db:/var/lib/postgres/data
     environment:
       POSTGRES_USER: attendence_user
       POSTGRES_DB: attendence
