@@ -37,7 +37,7 @@ public class UserService {
     public ProfileResponseDTO getProfile(Long userId) {
         Users user = usersRepository.findById(userId).orElse(null);
         if (user == null) {
-            throw new UserNotFoundException("존재하지 않는 사용자입니다");
+            throw new UserNotFoundException();
         }
 
         return ProfileResponseDTO.from(user);
@@ -48,7 +48,7 @@ public class UserService {
         Users user = usersRepository.findById(userId).orElse(null);
 
         if (user == null) {
-            throw new UserNotFoundException("존재하지 않는 사용자입니다");
+            throw new UserNotFoundException();
         }
 
         user.updateUser(userRequestDTO);

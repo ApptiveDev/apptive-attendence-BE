@@ -6,6 +6,10 @@ import apptive.attendence.dto.response.PenaltyDTO;
 import apptive.attendence.dto.response.PenaltyResponseDTO;
 import apptive.attendence.dto.response.UserResponseDTO;
 import apptive.attendence.entity.*;
+import apptive.attendence.exception.PenaltyNotFoundException;
+import apptive.attendence.exception.PenaltyRuleNotFoundException;
+import apptive.attendence.exception.ScheduleNotFoundException;
+import apptive.attendence.exception.UserNotFoundException;
 import apptive.attendence.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,8 +86,22 @@ public class AdminUserService {
     public PenaltyRequestDTO addPenalty(PenaltyRequestDTO penaltyRequestDTO) {
 
         Users user = usersRepository.findById(penaltyRequestDTO.userId()).orElse(null);
+
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+
         Schedule schedule = scheduleRepository.findById(penaltyRequestDTO.scheduleId()).orElse(null);
+
+        if (schedule == null) {
+            throw new ScheduleNotFoundException();
+        }
+
         PenaltyRule rule = ruleRepository.findById(penaltyRequestDTO.penaltyRuleId()).orElse(null);
+
+        if (rule == null) {
+            throw new PenaltyRuleNotFoundException();
+        }
 
         Penalty penalty = Penalty.builder()
                 .user(user)
