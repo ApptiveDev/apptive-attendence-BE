@@ -4,6 +4,7 @@ import apptive.attendence.dto.request.UserRequestDTO;
 import apptive.attendence.dto.response.ProfileResponseDTO;
 import apptive.attendence.dto.response.UserResponseDTO;
 import apptive.attendence.entity.Users;
+import apptive.attendence.exception.UserNotFoundException;
 import apptive.attendence.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,8 +20,6 @@ public class UserService {
 
     @Transactional
     public void signup(UserRequestDTO userRequestDTO) {
-        String encryptedPassword = userRequestDTO.password();
-
         Users newUser = Users.builder()
                 .name(userRequestDTO.name())
                 .email(userRequestDTO.email())
@@ -38,7 +37,7 @@ public class UserService {
     public ProfileResponseDTO getProfile(Long userId) {
         Users user = usersRepository.findById(userId).orElse(null);
         if (user == null) {
-            return null;
+            throw new UserNotFoundException("존재하지 않는 사용자입니다");
         }
 
         return ProfileResponseDTO.from(user);
@@ -49,7 +48,7 @@ public class UserService {
         Users user = usersRepository.findById(userId).orElse(null);
 
         if (user == null) {
-            return null;
+            throw new UserNotFoundException("존재하지 않는 사용자입니다");
         }
 
         user.updateUser(userRequestDTO);
